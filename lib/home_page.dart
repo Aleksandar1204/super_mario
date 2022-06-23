@@ -19,6 +19,7 @@ class _MyHomePageState extends State<HomePage> {
   double time = 0;
   double height = 0;
   double initialHeight = marioY;
+  String direction = "right";
 
   void preJump() {
     time = 0;
@@ -42,12 +43,14 @@ class _MyHomePageState extends State<HomePage> {
   }
 
   void moveRight() {
+    direction = "right";
     setState(() {
       marioX += 0.04;
     });
   }
 
   void moveLeft() {
+    direction = "left";
     setState(() {
       marioX -= 0.04;
     });
@@ -65,7 +68,9 @@ class _MyHomePageState extends State<HomePage> {
                 child: AnimatedContainer(
                   duration: Duration(milliseconds: 0),
                   alignment: Alignment(marioX, marioY),
-                  child: Mario(),
+                  child: Mario(
+                    direction: direction,
+                  ),
                 ),
               )),
           Expanded(
