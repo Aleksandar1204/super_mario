@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:supermario/button.dart';
 import 'package:supermario/mario.dart';
@@ -12,8 +14,32 @@ class HomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<HomePage> {
-  double marioX = 0;
-  double marioY = 1;
+  static double marioX = 0;
+  static double marioY = 1;
+  double time = 0;
+  double height = 0;
+  double initialHeight = marioY;
+
+  void preJump() {
+    time = 0;
+    initialHeight = marioY;
+  }
+
+  void jump() {
+    Timer.periodic(Duration(milliseconds: 50), (timer) {
+      time += 0.05;
+      height = -4.9 * time * time + 5 * time;
+      if (initialHeight - height > 1) {
+        setState(() {
+          marioY = 1;
+        });
+      } else {
+        setState(() {
+          marioY = initialHeight - height;
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +70,7 @@ class _MyHomePageState extends State<HomePage> {
                 ),
                 Button(
                   child: Icon(Icons.arrow_upward, color: Colors.white),
+                  function: jump,
                 ),
                 Button(
                   child: Icon(Icons.arrow_forward, color: Colors.white),
