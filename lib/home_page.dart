@@ -51,17 +51,31 @@ class _MyHomePageState extends State<HomePage> {
 
   void moveRight() {
     direction = "right";
-    midRun = !midRun;
-    setState(() {
-      marioX += 0.04;
+
+    Timer.periodic(Duration(milliseconds: 50), (timer) {
+      if (Button().holdingButtonPress() == true) {
+        setState(() {
+          marioX += 0.04;
+          midRun = !midRun;
+        });
+      } else {
+        timer.cancel();
+      }
     });
   }
 
   void moveLeft() {
     direction = "left";
-    midRun = !midRun;
-    setState(() {
-      marioX -= 0.04;
+
+    Timer.periodic(Duration(milliseconds: 50), (timer) {
+      if (Button().holdingButtonPress() == true) {
+        setState(() {
+          marioX -= 0.04;
+          midRun = !midRun;
+        });
+      } else {
+        timer.cancel();
+      }
     });
   }
 
