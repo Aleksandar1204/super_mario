@@ -20,6 +20,7 @@ class _MyHomePageState extends State<HomePage> {
   double height = 0;
   double initialHeight = marioY;
   String direction = "right";
+  bool midRun = false;
 
   void preJump() {
     time = 0;
@@ -44,6 +45,7 @@ class _MyHomePageState extends State<HomePage> {
 
   void moveRight() {
     direction = "right";
+    midRun = !midRun;
     setState(() {
       marioX += 0.04;
     });
@@ -51,6 +53,7 @@ class _MyHomePageState extends State<HomePage> {
 
   void moveLeft() {
     direction = "left";
+    midRun = !midRun;
     setState(() {
       marioX -= 0.04;
     });
@@ -70,6 +73,7 @@ class _MyHomePageState extends State<HomePage> {
                   alignment: Alignment(marioX, marioY),
                   child: Mario(
                     direction: direction,
+                    midRun: midRun,
                   ),
                 ),
               )),
