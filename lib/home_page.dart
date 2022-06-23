@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:supermario/button.dart';
 import 'package:supermario/jumping_mario.dart';
 import 'package:supermario/mario.dart';
+import 'package:supermario/mushroom.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -18,6 +19,9 @@ class HomePage extends StatefulWidget {
 class _MyHomePageState extends State<HomePage> {
   static double marioX = 0;
   static double marioY = 1;
+  double mushroomX = 0.5;
+  double mushroomY = 1;
+
   double time = 0;
   double height = 0;
   double initialHeight = marioY;
@@ -33,23 +37,25 @@ class _MyHomePageState extends State<HomePage> {
   }
 
   void jump() {
-    midJump = true;
-    preJump();
-    Timer.periodic(Duration(milliseconds: 50), (timer) {
-      time += 0.05;
-      height = -4.9 * time * time + 5 * time;
-      if (initialHeight - height > 1) {
-        midJump = false;
-        timer.cancel();
-        setState(() {
-          marioY = 1;
-        });
-      } else {
-        setState(() {
-          marioY = initialHeight - height;
-        });
-      }
-    });
+    if (midJump == false) {
+      midJump = true;
+      preJump();
+      Timer.periodic(Duration(milliseconds: 50), (timer) {
+        time += 0.05;
+        height = -4.9 * time * time + 5 * time;
+        if (initialHeight - height > 1) {
+          midJump = false;
+          timer.cancel();
+          setState(() {
+            marioY = 1;
+          });
+        } else {
+          setState(() {
+            marioY = initialHeight - height;
+          });
+        }
+      });
+    }
   }
 
   void moveRight() {
@@ -104,6 +110,9 @@ class _MyHomePageState extends State<HomePage> {
                               midRun: midRun,
                             )),
                 ),
+                Container(
+                    alignment: Alignment(mushroomX, mushroomY),
+                    child: Mushroom()),
                 SafeArea(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -113,6 +122,9 @@ class _MyHomePageState extends State<HomePage> {
                           Text(
                             "MARIO",
                             style: gameFont,
+                          ),
+                          SizedBox(
+                            height: 10,
                           ),
                           Text(
                             "0000",
@@ -126,6 +138,9 @@ class _MyHomePageState extends State<HomePage> {
                             "WORLD",
                             style: gameFont,
                           ),
+                          SizedBox(
+                            height: 10,
+                          ),
                           Text(
                             "1-1",
                             style: gameFont,
@@ -137,6 +152,9 @@ class _MyHomePageState extends State<HomePage> {
                           Text(
                             "TIME",
                             style: gameFont,
+                          ),
+                          SizedBox(
+                            height: 10,
                           ),
                           Text(
                             "00:00",
