@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:supermario/button.dart';
+import 'package:supermario/coin_box.dart';
 import 'package:supermario/jumping_mario.dart';
 import 'package:supermario/mario.dart';
 import 'package:supermario/mushroom.dart';
@@ -129,6 +130,10 @@ class _MyHomePageState extends State<HomePage> {
                 Container(
                     alignment: Alignment(mushroomX, mushroomY),
                     child: mushroomEat == true ? Container() : Mushroom()),
+                Container(
+                  alignment: Alignment(0, 0.1),
+                  child: CoinBox(),
+                ),
                 SafeArea(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
