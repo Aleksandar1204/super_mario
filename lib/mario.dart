@@ -8,7 +8,7 @@ class Mario extends StatelessWidget {
     return Container(
       width: 50,
       height: 50,
-      child: Image.asset('lib/images/standing_mario'),
+      child: Image.asset('lib/images/standing_mario.png'),
     );
   }
 }

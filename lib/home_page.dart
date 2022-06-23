@@ -12,6 +12,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<HomePage> {
+  double marioX = 0;
+  double marioY = 1;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,7 +26,7 @@ class _MyHomePageState extends State<HomePage> {
                 color: Colors.blue,
                 child: AnimatedContainer(
                   duration: Duration(milliseconds: 0),
-                  alignment: Alignment(0, 0),
+                  alignment: Alignment(marioX, marioY),
                   child: Mario(),
                 ),
               )),
