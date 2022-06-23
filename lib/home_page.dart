@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:supermario/button.dart';
 import 'package:supermario/jumping_mario.dart';
 import 'package:supermario/mario.dart';
@@ -23,6 +24,8 @@ class _MyHomePageState extends State<HomePage> {
   String direction = "right";
   bool midRun = true;
   bool midJump = false;
+  var gameFont = GoogleFonts.pressStart2p(
+      textStyle: TextStyle(color: Colors.white, fontSize: 20));
 
   void preJump() {
     time = 0;
@@ -86,20 +89,65 @@ class _MyHomePageState extends State<HomePage> {
         children: [
           Expanded(
               flex: 4,
-              child: Container(
-                color: Colors.blue,
-                child: AnimatedContainer(
-                    duration: Duration(milliseconds: 0),
-                    alignment: Alignment(marioX, marioY),
-                    child: midJump
-                        ? JumpingMario(
-                            direction: direction,
+              child: Stack(children: [
+                Container(
+                  color: Colors.blue,
+                  child: AnimatedContainer(
+                      duration: Duration(milliseconds: 0),
+                      alignment: Alignment(marioX, marioY),
+                      child: midJump
+                          ? JumpingMario(
+                              direction: direction,
+                            )
+                          : Mario(
+                              direction: direction,
+                              midRun: midRun,
+                            )),
+                ),
+                SafeArea(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Column(
+                        children: [
+                          Text(
+                            "MARIO",
+                            style: gameFont,
+                          ),
+                          Text(
+                            "0000",
+                            style: gameFont,
                           )
-                        : Mario(
-                            direction: direction,
-                            midRun: midRun,
-                          )),
-              )),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Text(
+                            "WORLD",
+                            style: gameFont,
+                          ),
+                          Text(
+                            "1-1",
+                            style: gameFont,
+                          )
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Text(
+                            "TIME",
+                            style: gameFont,
+                          ),
+                          Text(
+                            "00:00",
+                            style: gameFont,
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                )
+              ])),
           Expanded(
               child: Container(
             color: Colors.brown,
