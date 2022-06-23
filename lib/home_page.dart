@@ -21,15 +21,26 @@ class _MyHomePageState extends State<HomePage> {
   static double marioY = 1;
   double mushroomX = 0.5;
   double mushroomY = 1;
-
+  double marioSize = 50;
   double time = 0;
   double height = 0;
   double initialHeight = marioY;
   String direction = "right";
   bool midRun = true;
   bool midJump = false;
+  bool mushroomEat = false;
   var gameFont = GoogleFonts.pressStart2p(
       textStyle: TextStyle(color: Colors.white, fontSize: 20));
+
+  void ateShrooms() {
+    if ((marioX - mushroomX).abs() < 0.05 &&
+        (marioY - mushroomY).abs() < 0.05) {
+      setState(() {
+        mushroomEat = true;
+        marioSize = 100;
+      });
+    }
+  }
 
   void preJump() {
     time = 0;
@@ -39,6 +50,7 @@ class _MyHomePageState extends State<HomePage> {
   void jump() {
     if (midJump == false) {
       midJump = true;
+
       preJump();
       Timer.periodic(Duration(milliseconds: 50), (timer) {
         time += 0.05;
@@ -60,9 +72,10 @@ class _MyHomePageState extends State<HomePage> {
 
   void moveRight() {
     direction = "right";
-
+    ateShrooms();
     Timer.periodic(Duration(milliseconds: 50), (timer) {
-      if (Button().holdingButtonPress() == true) {
+      ateShrooms();
+      if (Button().holdingButtonPress() == true && (marioX + 0.04) < 1) {
         setState(() {
           marioX += 0.04;
           midRun = !midRun;
@@ -75,9 +88,10 @@ class _MyHomePageState extends State<HomePage> {
 
   void moveLeft() {
     direction = "left";
-
+    ateShrooms();
     Timer.periodic(Duration(milliseconds: 50), (timer) {
-      if (Button().holdingButtonPress() == true) {
+      ateShrooms();
+      if (Button().holdingButtonPress() == true && (marioX - 0.04) > -1) {
         setState(() {
           marioX -= 0.04;
           midRun = !midRun;
@@ -104,15 +118,17 @@ class _MyHomePageState extends State<HomePage> {
                       child: midJump
                           ? JumpingMario(
                               direction: direction,
+                              size: marioSize,
                             )
                           : Mario(
                               direction: direction,
                               midRun: midRun,
+                              size: marioSize,
                             )),
                 ),
                 Container(
                     alignment: Alignment(mushroomX, mushroomY),
-                    child: Mushroom()),
+                    child: mushroomEat == true ? Container() : Mushroom()),
                 SafeArea(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
