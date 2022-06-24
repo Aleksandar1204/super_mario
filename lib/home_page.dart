@@ -25,6 +25,8 @@ class _MyHomePageState extends State<HomePage> {
   double moneyBoxX = 0;
   double moneyBoxY = 0.3;
   double marioSize = 50;
+  double coinX = 0;
+  double coinY = 0;
   double time = 0;
   double height = 0;
   double initialHeight = marioY;
