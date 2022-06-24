@@ -61,6 +61,10 @@ class _MyHomePageState extends State<HomePage> {
       if (money % 10 == 0) {
         timer.cancel();
       }
+      if (money % 10 != 0 && (marioX - moneyBoxX).abs() > 0.05) {
+        showCoin = false;
+        timer.cancel();
+      }
     });
   }
 
