@@ -22,6 +22,8 @@ class _MyHomePageState extends State<HomePage> {
   static double marioY = 1;
   double mushroomX = 0.5;
   double mushroomY = 1;
+  double moneyBoxX = 0;
+  double moneyBoxY = 0.3;
   double marioSize = 50;
   double time = 0;
   double height = 0;
@@ -30,8 +32,10 @@ class _MyHomePageState extends State<HomePage> {
   bool midRun = true;
   bool midJump = false;
   bool mushroomEat = false;
+  bool touchBox = false;
+  int money = 0;
   var gameFont = GoogleFonts.pressStart2p(
-      textStyle: TextStyle(color: Colors.white, fontSize: 20));
+      textStyle: const TextStyle(color: Colors.white, fontSize: 20));
 
   void ateShrooms() {
     if ((marioX - mushroomX).abs() < 0.05 &&
@@ -39,6 +43,25 @@ class _MyHomePageState extends State<HomePage> {
       setState(() {
         mushroomEat = true;
         marioSize = 100;
+      });
+    }
+  }
+
+  void catchMoneyBox() {
+    if ((marioX - moneyBoxX).abs() < 0.05 &&
+        (marioY - moneyBoxY).abs() < 0.18) {
+      setState(() {
+        money += 1;
+      });
+    }
+
+    if ((marioX - moneyBoxX).abs() < 0.05) {
+      setState(() {
+        touchBox = true;
+      });
+    } else {
+      setState(() {
+        touchBox = false;
       });
     }
   }
@@ -53,12 +76,24 @@ class _MyHomePageState extends State<HomePage> {
       midJump = true;
 
       preJump();
-      Timer.periodic(Duration(milliseconds: 50), (timer) {
+
+      Timer.periodic(const Duration(milliseconds: 50), (timer) {
+        catchMoneyBox();
         time += 0.05;
-        height = -4.9 * time * time + 5 * time;
+
+        height = touchBox == true
+            ? -11.9 * time * time + 5 * time
+            : mushroomEat == false
+                ? -4.9 * time * time + 5 * time
+                : mushroomEat == true
+                    ? -3.9 * time * time + 5 * time
+                    : 0;
+
         if (initialHeight - height > 1) {
+          marioY = initialHeight - 0.3;
           midJump = false;
           timer.cancel();
+
           setState(() {
             marioY = 1;
           });
@@ -74,9 +109,9 @@ class _MyHomePageState extends State<HomePage> {
   void moveRight() {
     direction = "right";
     ateShrooms();
-    Timer.periodic(Duration(milliseconds: 50), (timer) {
+    Timer.periodic(const Duration(milliseconds: 50), (timer) {
       ateShrooms();
-      if (Button().holdingButtonPress() == true && (marioX + 0.04) < 1) {
+      if (const Button().holdingButtonPress() == true && (marioX + 0.04) < 1) {
         setState(() {
           marioX += 0.04;
           midRun = !midRun;
@@ -90,9 +125,9 @@ class _MyHomePageState extends State<HomePage> {
   void moveLeft() {
     direction = "left";
     ateShrooms();
-    Timer.periodic(Duration(milliseconds: 50), (timer) {
+    Timer.periodic(const Duration(milliseconds: 50), (timer) {
       ateShrooms();
-      if (Button().holdingButtonPress() == true && (marioX - 0.04) > -1) {
+      if (const Button().holdingButtonPress() == true && (marioX - 0.04) > -1) {
         setState(() {
           marioX -= 0.04;
           midRun = !midRun;
@@ -114,7 +149,7 @@ class _MyHomePageState extends State<HomePage> {
                 Container(
                   color: Colors.blue,
                   child: AnimatedContainer(
-                      duration: Duration(milliseconds: 0),
+                      duration: const Duration(milliseconds: 0),
                       alignment: Alignment(marioX, marioY),
                       child: midJump
                           ? JumpingMario(
@@ -129,10 +164,11 @@ class _MyHomePageState extends State<HomePage> {
                 ),
                 Container(
                     alignment: Alignment(mushroomX, mushroomY),
-                    child: mushroomEat == true ? Container() : Mushroom()),
+                    child:
+                        mushroomEat == true ? Container() : const Mushroom()),
                 Container(
-                  alignment: Alignment(0, 0.1),
-                  child: CoinBox(),
+                  alignment: Alignment(moneyBoxX, moneyBoxY),
+                  child: const CoinBox(),
                 ),
                 SafeArea(
                   child: Row(
@@ -144,11 +180,11 @@ class _MyHomePageState extends State<HomePage> {
                             "MARIO",
                             style: gameFont,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           Text(
-                            "0000",
+                            money.toString(),
                             style: gameFont,
                           )
                         ],
@@ -159,7 +195,7 @@ class _MyHomePageState extends State<HomePage> {
                             "WORLD",
                             style: gameFont,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           Text(
@@ -174,7 +210,7 @@ class _MyHomePageState extends State<HomePage> {
                             "TIME",
                             style: gameFont,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           Text(
