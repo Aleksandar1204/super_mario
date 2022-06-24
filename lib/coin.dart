@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 class Coin extends StatelessWidget {
   const Coin({Key? key}) : super(key: key);
@@ -8,8 +6,8 @@ class Coin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 50,
-      height: 50,
+      width: 30,
+      height: 30,
       child: Image.asset('lib/images/coin.png'),
     );
   }

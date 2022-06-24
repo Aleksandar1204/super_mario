@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:supermario/button.dart';
+import 'package:supermario/coin.dart';
 import 'package:supermario/coin_box.dart';
 import 'package:supermario/jumping_mario.dart';
 import 'package:supermario/mario.dart';
@@ -35,6 +36,7 @@ class _MyHomePageState extends State<HomePage> {
   bool midJump = false;
   bool mushroomEat = false;
   bool touchBox = false;
+  bool showCoin = false;
   int money = 0;
   var gameFont = GoogleFonts.pressStart2p(
       textStyle: const TextStyle(color: Colors.white, fontSize: 20));
@@ -49,21 +51,25 @@ class _MyHomePageState extends State<HomePage> {
     }
   }
 
+  void coinMove() {
+    showCoin = true;
+
+    Timer.periodic(const Duration(milliseconds: 50), (timer) {
+      setState(() {
+        coinY -= 0.04;
+      });
+      if (money % 10 == 0) {
+        timer.cancel();
+      }
+    });
+  }
+
   void catchMoneyBox() {
     if ((marioX - moneyBoxX).abs() < 0.05 &&
         (marioY - moneyBoxY).abs() < 0.18) {
+      coinMove();
       setState(() {
         money += 1;
-      });
-    }
-
-    if ((marioX - moneyBoxX).abs() < 0.05) {
-      setState(() {
-        touchBox = true;
-      });
-    } else {
-      setState(() {
-        touchBox = false;
       });
     }
   }
@@ -83,7 +89,7 @@ class _MyHomePageState extends State<HomePage> {
         catchMoneyBox();
         time += 0.05;
 
-        height = touchBox == true
+        height = ((marioX - moneyBoxX).abs() < 0.05)
             ? -11.9 * time * time + 5 * time
             : mushroomEat == false
                 ? -4.9 * time * time + 5 * time
@@ -92,12 +98,12 @@ class _MyHomePageState extends State<HomePage> {
                     : 0;
 
         if (initialHeight - height > 1) {
-          marioY = initialHeight - 0.3;
           midJump = false;
           timer.cancel();
 
           setState(() {
             marioY = 1;
+            coinY = 0;
           });
         } else {
           setState(() {
@@ -172,6 +178,12 @@ class _MyHomePageState extends State<HomePage> {
                   alignment: Alignment(moneyBoxX, moneyBoxY),
                   child: const CoinBox(),
                 ),
+                showCoin == true
+                    ? Container(
+                        alignment: Alignment(coinX, coinY),
+                        child: const Coin(),
+                      )
+                    : Container(),
                 SafeArea(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
