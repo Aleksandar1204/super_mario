@@ -61,7 +61,7 @@ class _MyHomePageState extends State<HomePage> {
       if (money % 10 == 0) {
         timer.cancel();
       }
-      if (money % 10 != 0 && (marioX - moneyBoxX).abs() > 0.05) {
+      if (money % 10 != 0 && (marioX - moneyBoxX).abs() > 0.1) {
         showCoin = false;
         timer.cancel();
       }
@@ -69,8 +69,7 @@ class _MyHomePageState extends State<HomePage> {
   }
 
   void catchMoneyBox() {
-    if ((marioX - moneyBoxX).abs() < 0.05 &&
-        (marioY - moneyBoxY).abs() < 0.18) {
+    if ((marioX - moneyBoxX).abs() < 0.1 && (marioY - moneyBoxY).abs() < 0.32) {
       coinMove();
       setState(() {
         money += 1;
@@ -92,9 +91,9 @@ class _MyHomePageState extends State<HomePage> {
       Timer.periodic(const Duration(milliseconds: 50), (timer) {
         catchMoneyBox();
         time += 0.05;
-
-        height = ((marioX - moneyBoxX).abs() < 0.05)
-            ? -11.9 * time * time + 5 * time
+        print(marioY - moneyBoxY);
+        height = ((marioX - moneyBoxX).abs() < 0.1 && marioY - moneyBoxY > 0.3)
+            ? -15.9 * time * time + 5 * time
             : mushroomEat == false
                 ? -4.9 * time * time + 5 * time
                 : mushroomEat == true
