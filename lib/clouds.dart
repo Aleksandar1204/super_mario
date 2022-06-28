@@ -6,7 +6,9 @@ class Clouds extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Image.asset('lib/images/cluds.dart'),
+      width: 300,
+      height: 300,
+      child: Image.asset('lib/images/cluds.png'),
     );
   }
 }

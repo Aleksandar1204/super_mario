@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:supermario/button.dart';
+import 'package:supermario/clouds.dart';
 import 'package:supermario/coin.dart';
 import 'package:supermario/coin_box.dart';
 import 'package:supermario/jumping_mario.dart';
@@ -185,6 +186,7 @@ class _MyHomePageState extends State<HomePage> {
       ateShrooms();
       if (const Button().holdingButtonPress() == true && (marioX + 0.04) < 1) {
         setState(() {
+          cloudsX -= 0.04;
           marioX += 0.04;
           midRun = !midRun;
         });
@@ -213,6 +215,7 @@ class _MyHomePageState extends State<HomePage> {
       }
       if (const Button().holdingButtonPress() == true && (marioX - 0.04) > -1) {
         setState(() {
+          cloudsX += 0.04;
           marioX -= 0.04;
           midRun = !midRun;
         });
@@ -230,24 +233,29 @@ class _MyHomePageState extends State<HomePage> {
           Expanded(
               flex: 4,
               child: Stack(children: [
-                AnimatedContainer(
-                  alignment: Alignment(cloudsX, cloudsY),
-                  duration: const Duration(milliseconds: 0),
-                  child: Container(
-                    color: Colors.blue,
-                    child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 0),
-                        alignment: Alignment(marioX, marioY),
-                        child: midJump
-                            ? JumpingMario(
-                                direction: direction,
-                                size: marioSize,
-                              )
-                            : Mario(
-                                direction: direction,
-                                midRun: midRun,
-                                size: marioSize,
-                              )),
+                Container(
+                  color: Colors.blue,
+                  child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 0),
+                      alignment: Alignment(marioX, marioY),
+                      child: midJump
+                          ? JumpingMario(
+                              direction: direction,
+                              size: marioSize,
+                            )
+                          : Mario(
+                              direction: direction,
+                              midRun: midRun,
+                              size: marioSize,
+                            )),
+                ),
+                Center(
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 0),
+                    alignment: Alignment(cloudsX, cloudsY),
+                    child: Container(
+                      child: Clouds(),
+                    ),
                   ),
                 ),
                 Container(
