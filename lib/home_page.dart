@@ -83,6 +83,39 @@ class _MyHomePageState extends State<HomePage> {
   }
 
   void jump() {
+    if (initialHeight == 1.16) {
+      if (midJump == false) {
+        midJump = true;
+        preJump();
+        Timer.periodic(const Duration(milliseconds: 50), (timer) {
+          catchMoneyBox();
+          time += 0.05;
+          print(marioY - moneyBoxY);
+          height =
+              ((marioX - moneyBoxX).abs() < 0.1 && marioY - moneyBoxY > 0.3)
+                  ? -15.9 * time * time + 5 * time
+                  : mushroomEat == false
+                      ? -4.9 * time * time + 5 * time
+                      : mushroomEat == true
+                          ? -3.9 * time * time + 5 * time
+                          : 0;
+
+          if (initialHeight - height > 1) {
+            midJump = false;
+            timer.cancel();
+
+            setState(() {
+              marioY = 1;
+              coinY = 0;
+            });
+          } else {
+            setState(() {
+              marioY = initialHeight - height;
+            });
+          }
+        });
+      }
+    }
     if (midJump == false) {
       midJump = true;
 
@@ -99,6 +132,14 @@ class _MyHomePageState extends State<HomePage> {
                 : mushroomEat == true
                     ? -3.9 * time * time + 5 * time
                     : 0;
+
+        if ((marioX - moneyBoxX).abs() < 0.1 && marioY < -0.22) {
+          setState(() {
+            initialHeight = 1.16;
+            midJump = false;
+            timer.cancel();
+          });
+        }
 
         if (initialHeight - height > 1) {
           midJump = false;
@@ -119,8 +160,23 @@ class _MyHomePageState extends State<HomePage> {
 
   void moveRight() {
     direction = "right";
+
     ateShrooms();
+
     Timer.periodic(const Duration(milliseconds: 50), (timer) {
+      if ((marioX - moneyBoxX).abs() > 0.12 && initialHeight == 1.16) {
+        Timer.periodic(const Duration(milliseconds: 5), (timer) {
+          setState(() {
+            marioY += 0.004;
+            if (marioY > 0.99) {
+              initialHeight = 0;
+              timer.cancel();
+              return;
+            }
+          });
+        });
+      }
+
       ateShrooms();
       if (const Button().holdingButtonPress() == true && (marioX + 0.04) < 1) {
         setState(() {
@@ -138,6 +194,18 @@ class _MyHomePageState extends State<HomePage> {
     ateShrooms();
     Timer.periodic(const Duration(milliseconds: 50), (timer) {
       ateShrooms();
+      if ((marioX - moneyBoxX).abs() > 0.12 && initialHeight == 1.16) {
+        Timer.periodic(const Duration(milliseconds: 5), (timer) {
+          setState(() {
+            marioY += 0.004;
+            if (marioY > 0.99) {
+              initialHeight = 0;
+              timer.cancel();
+              return;
+            }
+          });
+        });
+      }
       if (const Button().holdingButtonPress() == true && (marioX - 0.04) > -1) {
         setState(() {
           marioX -= 0.04;
@@ -242,7 +310,12 @@ class _MyHomePageState extends State<HomePage> {
               ])),
           Expanded(
               child: Container(
-            color: Colors.brown,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("lib/images/bricks.png"),
+                fit: BoxFit.cover,
+              ),
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
