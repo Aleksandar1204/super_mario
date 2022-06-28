@@ -312,7 +312,7 @@ class _MyHomePageState extends State<HomePage> {
               child: Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage("lib/images/bricks.png"),
+                image: AssetImage("lib/images/Flat-Bricks.jpg"),
                 fit: BoxFit.cover,
               ),
             ),
