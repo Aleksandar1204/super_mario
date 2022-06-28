@@ -25,6 +25,8 @@ class _MyHomePageState extends State<HomePage> {
   double mushroomY = 1;
   double moneyBoxX = 0;
   double moneyBoxY = 0.3;
+  double cloudsX = 0;
+  double cloudsY = 0;
   double marioSize = 50;
   double coinX = 0;
   double coinY = 0;
@@ -38,6 +40,7 @@ class _MyHomePageState extends State<HomePage> {
   bool touchBox = false;
   bool showCoin = false;
   int money = 0;
+
   var gameFont = GoogleFonts.pressStart2p(
       textStyle: const TextStyle(color: Colors.white, fontSize: 20));
 
@@ -81,6 +84,8 @@ class _MyHomePageState extends State<HomePage> {
     time = 0;
     initialHeight = marioY;
   }
+
+  void movingClouds() {}
 
   void jump() {
     if (initialHeight == 1.16) {
@@ -225,21 +230,25 @@ class _MyHomePageState extends State<HomePage> {
           Expanded(
               flex: 4,
               child: Stack(children: [
-                Container(
-                  color: Colors.blue,
-                  child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 0),
-                      alignment: Alignment(marioX, marioY),
-                      child: midJump
-                          ? JumpingMario(
-                              direction: direction,
-                              size: marioSize,
-                            )
-                          : Mario(
-                              direction: direction,
-                              midRun: midRun,
-                              size: marioSize,
-                            )),
+                AnimatedContainer(
+                  alignment: Alignment(cloudsX, cloudsY),
+                  duration: const Duration(milliseconds: 0),
+                  child: Container(
+                    color: Colors.blue,
+                    child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 0),
+                        alignment: Alignment(marioX, marioY),
+                        child: midJump
+                            ? JumpingMario(
+                                direction: direction,
+                                size: marioSize,
+                              )
+                            : Mario(
+                                direction: direction,
+                                midRun: midRun,
+                                size: marioSize,
+                              )),
+                  ),
                 ),
                 Container(
                     alignment: Alignment(mushroomX, mushroomY),
